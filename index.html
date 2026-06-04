@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sunidhi Bharti — Video Editor & Motion Graphics Artist</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --bg:#080808;
+  --surface:#111;
+  --surface2:#161616;
+  --border:rgba(255,255,255,0.07);
+  --white:#f0ece4;
+  --muted:rgba(240,236,228,0.45);
+  --accent:#d4f264;
+  --accent2:#a8e040;
+  --red:#ff4d4d;
+}
+
+html{scroll-behavior:smooth;}
+
+body{
+  background:var(--bg);
+  color:var(--white);
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* CURSOR */
+#cursor{
+  position:fixed;width:10px;height:10px;
+  background:var(--accent);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.1s,width 0.25s,height 0.25s,background 0.25s;
+  mix-blend-mode:difference;
+}
+#cursor.grow{width:40px;height:40px;}
+
+/* NAV */
+nav{
+  position:fixed;top:0;width:100%;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.25rem 2.5rem;
+  background:rgba(8,8,8,0.8);
+  backdrop-filter:blur(16px);
+  border-bottom:0.5px solid var(--border);
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:1.1rem;letter-spacing:0.05em;
+}
+.nav-logo span{color:var(--accent);}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{
+  color:var(--muted);text-decoration:none;
+  font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;
+  transition:color 0.2s;
+}
+.nav-links a:hover{color:var(--white);}
+.nav-cta{
+  background:var(--accent);color:#080808;
+  padding:0.55rem 1.25rem;font-size:0.75rem;
+  font-weight:500;letter-spacing:0.08em;text-transform:uppercase;
+  text-decoration:none;transition:opacity 0.2s;
+  font-family:'DM Sans',sans-serif;
+}
+.nav-cta:hover{opacity:0.85;}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:8rem 2.5rem 5rem;
+  position:relative;overflow:hidden;
+}
+.hero-noise{
+  position:absolute;inset:0;
+  opacity:0.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px;
+}
+.hero-dot-grid{
+  position:absolute;inset:0;
+  background-image:radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size:32px 32px;
+  opacity:0.5;
+}
+.hero-glow{
+  position:absolute;top:-10%;right:-5%;
+  width:50vw;height:50vw;border-radius:50%;
+  background:radial-gradient(circle, rgba(212,242,100,0.06) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-inner{position:relative;z-index:2;max-width:900px;}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:0.6rem;
+  font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:1.5rem;
+  border:0.5px solid rgba(212,242,100,0.25);
+  padding:0.4rem 0.9rem;
+}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.hero-h1{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(3.5rem,9vw,8rem);
+  line-height:0.95;letter-spacing:-0.02em;
+  margin-bottom:2rem;
+}
+.hero-h1 .line2{
+  color:transparent;
+  -webkit-text-stroke:1.5px rgba(240,236,228,0.3);
+}
+.hero-h1 .accent{color:var(--accent);}
+.hero-sub{
+  font-size:clamp(0.9rem,1.5vw,1.1rem);
+  color:var(--muted);line-height:1.75;
+  max-width:500px;margin-bottom:2.5rem;
+}
+.hero-actions{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;}
+.btn-solid{
+  background:var(--accent);color:#080808;
+  padding:0.8rem 2rem;font-size:0.8rem;
+  font-weight:500;letter-spacing:0.08em;text-transform:uppercase;
+  text-decoration:none;transition:opacity 0.2s;
+  font-family:'DM Sans',sans-serif;
+}
+.btn-solid:hover{opacity:0.85;}
+.btn-outline{
+  color:var(--white);
+  border:0.5px solid rgba(240,236,228,0.25);
+  padding:0.8rem 2rem;font-size:0.8rem;
+  letter-spacing:0.08em;text-transform:uppercase;
+  text-decoration:none;transition:border-color 0.2s,color 0.2s;
+  font-family:'DM Sans',sans-serif;
+}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.hero-stats{
+  position:absolute;bottom:3.5rem;right:2.5rem;z-index:2;
+  display:flex;gap:3rem;
+}
+.stat{text-align:right;}
+.stat-n{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:2.2rem;line-height:1;color:var(--accent);
+}
+.stat-l{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-top:0.25rem;}
+
+/* SECTION COMMON */
+section{padding:5rem 2.5rem;}
+.sec-label{
+  font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:2.5rem;
+  display:flex;align-items:center;gap:1rem;
+}
+.sec-label::after{content:'';flex:1;height:0.5px;background:linear-gradient(to right,var(--border),transparent);}
+.sec-h2{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:clamp(1.8rem,4vw,3rem);
+  line-height:1.1;margin-bottom:1rem;
+}
+
+/* MARQUEE */
+.marquee-section{
+  padding:2rem 0;
+  background:var(--surface);
+  border-top:0.5px solid var(--border);
+  border-bottom:0.5px solid var(--border);
+  overflow:hidden;
+}
+.marquee-track{
+  display:flex;gap:3rem;align-items:center;
+  animation:marquee 30s linear infinite;
+  width:max-content;
+}
+.marquee-track:hover{animation-play-state:paused;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.marquee-item{
+  display:flex;align-items:center;gap:0.75rem;
+  white-space:nowrap;flex-shrink:0;
+  padding:0.5rem 1.5rem;
+  border:0.5px solid var(--border);
+}
+.marquee-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:0.75rem;
+  color:var(--accent);border:0.5px solid rgba(212,242,100,0.2);
+  flex-shrink:0;
+}
+.marquee-name{font-size:0.8rem;font-weight:500;}
+.marquee-sub{font-size:0.68rem;color:var(--muted);}
+.marquee-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--accent);opacity:0.5;flex-shrink:0;
+}
+
+/* VIDEO GRID */
+.video-section{background:var(--bg);}
+.video-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+}
+.video-card{
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  overflow:hidden;
+  transition:border-color 0.25s,transform 0.25s;
+  cursor:pointer;
+}
+.video-card:hover{border-color:rgba(212,242,100,0.3);transform:translateY(-4px);}
+.video-card:first-child{grid-column:span 2;}
+.video-thumb{
+  position:relative;padding-top:56.25%;
+  background:#0d0d0d;overflow:hidden;
+}
+.video-thumb iframe{
+  position:absolute;inset:0;width:100%;height:100%;border:none;
+  pointer-events:none;
+}
+.video-thumb-overlay{
+  position:absolute;inset:0;
+  background:rgba(8,8,8,0.4);
+  display:flex;align-items:center;justify-content:center;
+  opacity:1;transition:opacity 0.2s;
+}
+.video-card:hover .video-thumb-overlay{opacity:0;}
+.play-circle{
+  width:52px;height:52px;border-radius:50%;
+  border:1.5px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  transition:background 0.2s;
+}
+.play-circle svg{fill:var(--accent);width:18px;height:18px;margin-left:4px;}
+.video-info{padding:1rem 1.25rem;}
+.video-title{font-family:'Syne',sans-serif;font-weight:600;font-size:0.88rem;margin-bottom:0.3rem;}
+.video-meta{font-size:0.7rem;color:var(--muted);display:flex;align-items:center;gap:0.5rem;}
+.video-tag{
+  font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;
+  padding:0.2rem 0.6rem;
+  border:0.5px solid rgba(212,242,100,0.25);
+  color:var(--accent);
+}
+
+/* ABOUT */
+.about-section{background:var(--surface);}
+.about-layout{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:start;
+}
+.about-text .sec-h2{margin-bottom:1.5rem;}
+.about-body{font-size:0.93rem;color:var(--muted);line-height:1.85;margin-bottom:1rem;}
+.about-highlight{
+  margin-top:2rem;padding:1.25rem;
+  border-left:2px solid var(--accent);
+  background:rgba(212,242,100,0.04);
+}
+.about-highlight p{font-size:0.85rem;color:var(--white);line-height:1.7;font-style:italic;}
+
+/* SKILLS */
+.skills-wrap{margin-top:2rem;}
+.skill-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0.85rem 0;
+  border-bottom:0.5px solid var(--border);
+}
+.skill-row:last-child{border-bottom:none;}
+.skill-label{font-size:0.82rem;font-weight:500;}
+.skill-bar-wrap{flex:1;margin:0 1.5rem;height:3px;background:var(--border);}
+.skill-bar{height:100%;background:var(--accent);transform-origin:left;}
+.skill-pct{font-size:0.72rem;color:var(--muted);min-width:2.5rem;text-align:right;}
+
+/* SERVICES */
+.services-section{background:var(--bg);}
+.services-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);
+  margin-top:1rem;
+}
+.svc{
+  background:var(--bg);padding:2rem 1.5rem;
+  border-top:2px solid transparent;
+  transition:border-color 0.25s,background 0.25s;
+}
+.svc:hover{border-color:var(--accent);background:rgba(212,242,100,0.03);}
+.svc-num{
+  font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;
+  color:rgba(212,242,100,0.08);line-height:1;margin-bottom:1rem;
+}
+.svc-title{font-family:'Syne',sans-serif;font-weight:600;font-size:0.95rem;margin-bottom:0.6rem;}
+.svc-desc{font-size:0.78rem;color:var(--muted);line-height:1.75;}
+.svc-price{
+  margin-top:1.5rem;font-size:0.7rem;
+  letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);
+}
+
+/* CONTACT */
+.contact-section{background:var(--surface);}
+.contact-layout{
+  display:grid;grid-template-columns:1fr 1.1fr;
+  gap:5rem;align-items:start;
+}
+.contact-h{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(2.5rem,6vw,5rem);
+  line-height:0.95;margin-bottom:1.25rem;
+}
+.contact-h em{color:var(--accent);font-style:normal;}
+.contact-sub{font-size:0.88rem;color:var(--muted);line-height:1.75;margin-bottom:2rem;}
+.contact-methods{display:flex;flex-direction:column;gap:0.75rem;}
+.contact-method{
+  display:flex;align-items:center;gap:1rem;
+  text-decoration:none;color:var(--white);
+  padding:0.875rem 1.25rem;
+  background:var(--surface2);
+  border:0.5px solid var(--border);
+  font-size:0.82rem;
+  transition:border-color 0.2s;
+}
+.contact-method:hover{border-color:var(--accent);}
+.contact-method-icon{
+  width:32px;height:32px;flex-shrink:0;
+  background:rgba(212,242,100,0.08);
+  display:flex;align-items:center;justify-content:center;
+}
+.contact-method-icon svg{fill:var(--accent);width:15px;height:15px;}
+.contact-method-detail{display:flex;flex-direction:column;}
+.contact-method-label{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);}
+.contact-method-val{font-size:0.82rem;margin-top:0.1rem;}
+.best-at{margin-top:2.5rem;}
+.best-at h4{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;}
+.best-at ul{list-style:none;display:flex;flex-direction:column;gap:0.5rem;}
+.best-at li{
+  font-size:0.82rem;color:var(--white);
+  display:flex;align-items:center;gap:0.75rem;
+}
+.best-at li::before{content:'→';color:var(--accent);font-size:0.75rem;}
+
+/* FORM */
+.contact-form{display:flex;flex-direction:column;gap:1rem;}
+.field{display:flex;flex-direction:column;gap:0.35rem;}
+.field label{font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);}
+.field input,.field textarea,.field select{
+  background:var(--surface2);
+  border:0.5px solid var(--border);
+  color:var(--white);
+  padding:0.75rem 1rem;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.85rem;
+  outline:none;resize:none;
+  transition:border-color 0.2s;
+  appearance:none;
+}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent);}
+.field select option{background:var(--surface2);}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.submit-btn{
+  background:var(--accent);color:#080808;
+  border:none;padding:0.875rem 2rem;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.78rem;font-weight:500;
+  letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;align-self:flex-start;
+  transition:opacity 0.2s;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.submit-btn:hover{opacity:0.85;}
+
+/* FOOTER */
+footer{
+  padding:1.75rem 2.5rem;
+  border-top:0.5px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:0.72rem;color:var(--muted);
+}
+.footer-logo{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:1rem;color:rgba(212,242,100,0.35);
+  letter-spacing:0.05em;
+}
+
+/* FADE IN */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{opacity:0;animation:fadeUp 0.65s ease both;}
+.d1{animation-delay:0.1s;}.d2{animation-delay:0.2s;}
+.d3{animation-delay:0.3s;}.d4{animation-delay:0.4s;}.d5{animation-delay:0.5s;}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem;}
+  .nav-links{display:none;}
+  section{padding:3.5rem 1.5rem;}
+  .hero{padding:6rem 1.5rem 3rem;}
+  .hero-stats{position:static;flex-direction:row;margin-top:2.5rem;gap:2rem;justify-content:flex-start;}
+  .about-layout,.contact-layout{grid-template-columns:1fr;gap:2.5rem;}
+  .video-grid{grid-template-columns:1fr;}
+  .video-card:first-child{grid-column:1;}
+  .services-grid{grid-template-columns:1fr;}
+  .field-row{grid-template-columns:1fr;}
+  footer{flex-direction:column;gap:0.5rem;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Sunidhi<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Hire me</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-dot-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow fade-up d1">Available for freelance work</div>
+    <h1 class="hero-h1 fade-up d2">
+      Sunidhi<br>
+      <span class="line2">Bharti<span class="accent">.</span></span>
+    </h1>
+    <p class="hero-sub fade-up d3">Video Editor & Motion Graphics Artist. Fast delivery, fresh ideas — every frame crafted for maximum impact.</p>
+    <div class="hero-actions fade-up d4">
+      <a href="#work" class="btn-solid">View my work</a>
+      <a href="#contact" class="btn-outline">Let's collaborate →</a>
+    </div>
+  </div>
+  <div class="hero-stats fade-up d5">
+    <div class="stat">
+      <div class="stat-n">50+</div>
+      <div class="stat-l">Projects</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">48h</div>
+      <div class="stat-l">Avg. delivery</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">3+</div>
+      <div class="stat-l">Years exp.</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE — Clients/Creators -->
+<div class="marquee-section" id="creators">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- VIDEO GRID -->
+<section class="video-section" id="work">
+  <p class="sec-label reveal">Featured edits</p>
+  <h2 class="sec-h2 reveal">Work that speaks for itself.</h2>
+  <p style="color:var(--muted);font-size:0.88rem;margin-bottom:2.5rem;max-width:500px;" class="reveal">A mix of long-form and short-form content. Replace the embed URLs below with your own YouTube or Vimeo links.</p>
+  <div class="video-grid reveal">
+    <!-- Card 1 — spans 2 cols -->
+    <div class="video-card">
+      <div class="video-thumb">
+        <iframe src="https://www.youtube.com/embed/uVXnLMQs4x0?si=ol2HnQq0TDm2aq7i" allowfullscreen loading="lazy" title="Video 1"></iframe>
+        <div class="video-thumb-overlay">
+          <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+      </div>
+      <div class="video-info">
+        <p class="video-title">Brand Campaign — Cinematic Cut</p>
+        <div class="video-meta"><span class="video-tag">Commercial</span><span>Motion Graphics · Color Grade</span></div>
+      </div>
+    </div>
+    <!-- Card 2 -->
+    <div class="video-card">
+      <div class="video-thumb">
+        <iframe src="https://player.vimeo.com/video/1166740503?badge=0&autopause=0" allowfullscreen loading="lazy" title="Video 2"></iframe>
+        <div class="video-thumb-overlay">
+          <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+      </div>
+      <div class="video-info">
+        <p class="video-title">Motion Graphics Opener</p>
+        <div class="video-meta"><span class="video-tag">Motion</span><span>Animation · Title sequence</span></div>
+      </div>
+    </div>
+    <!-- Card 3 -->
+    <div class="video-card">
+      <div class="video-thumb">
+        <iframe src="https://player.vimeo.com/video/1166739507?badge=0&autopause=0" allowfullscreen loading="lazy" title="Video 3"></iframe>
+        <div class="video-thumb-overlay">
+          <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+      </div>
+      <div class="video-info">
+        <p class="video-title">Short-form Hype Reel</p>
+        <div class="video-meta"><span class="video-tag">Reels</span><span>Fast pacing · Sound design</span></div>
+      </div>
+    </div>
+    <!-- Card 4 -->
+    <div class="video-card">
+      <div class="video-thumb">
+        <iframe src="https://www.youtube.com/embed/Dx8pyPvpEJI?si=USc9RdZDV1wIr6iB" allowfullscreen loading="lazy" title="Video 4"></iframe>
+        <div class="video-thumb-overlay">
+          <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+      </div>
+      <div class="video-info">
+        <p class="video-title">YouTube Series Edit</p>
+        <div class="video-meta"><span class="video-tag">YouTube</span><span>Storytelling · Long-form</span></div>
+      </div>
+    </div>
+    <!-- Card 5 -->
+    <div class="video-card">
+      <div class="video-thumb">
+        <iframe src="https://player.vimeo.com/video/1166747598?badge=0&autopause=0" allowfullscreen loading="lazy" title="Video 5"></iframe>
+        <div class="video-thumb-overlay">
+          <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+      </div>
+      <div class="video-info">
+        <p class="video-title">Marketing Agency Ad</p>
+        <div class="video-meta"><span class="video-tag">Commercial</span><span>Branding · Motion</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-layout">
+    <div class="about-text reveal">
+      <p class="sec-label">About me</p>
+      <h2 class="sec-h2">Frames that hit different.</h2>
+      <p class="about-body">I'm Sunidhi Bharti — a freelance video editor and motion graphics artist based in Pune who turns raw footage into stories that land. Whether it's a fast-paced hype reel, a polished brand spot, or a cinematic short, I bring precision and energy to every cut.</p>
+      <p class="about-body">My edge? I know your deadlines are real, and I treat them that way. Fast delivery isn't a bonus — it's built into how I work.</p>
+      <div class="about-highlight">
+        <p>"Fast delivery. Fresh ideas. Every frame crafted for maximum impact."</p>
+      </div>
+    </div>
+    <div class="reveal">
+      <p class="sec-label">Software skills</p>
+      <div class="skills-wrap">
+        <div class="skill-row">
+          <span class="skill-label">DaVinci Resolve</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:95%"></div></div>
+          <span class="skill-pct">95%</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-label">Adobe Premiere Pro</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:90%"></div></div>
+          <span class="skill-pct">90%</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-label">After Effects</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:85%"></div></div>
+          <span class="skill-pct">85%</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-label">Adobe Photoshop</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div>
+          <span class="skill-pct">80%</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-label">Adobe Audition</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:75%"></div></div>
+          <span class="skill-pct">75%</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-label">CapCut</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:88%"></div></div>
+          <span class="skill-pct">88%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-section" id="services">
+  <p class="sec-label reveal">Services & pricing</p>
+  <h2 class="sec-h2 reveal">What I do best.</h2>
+  <div class="services-grid reveal">
+    <div class="svc">
+      <div class="svc-num">01</div>
+      <p class="svc-title">Short-form Editing</p>
+      <p class="svc-desc">Reels, Shorts, TikToks — snappy, scroll-stopping cuts with sound design and captions. Delivered fast.</p>
+      <p class="svc-price">From ₹1,500 / video</p>
+    </div>
+    <div class="svc">
+      <div class="svc-num">02</div>
+      <p class="svc-title">Long-form & YouTube</p>
+      <p class="svc-desc">Full episode edits, vlogs, interviews with colour grading and full audio mix.</p>
+      <p class="svc-price">From ₹4,000 / video</p>
+    </div>
+    <div class="svc">
+      <div class="svc-num">03</div>
+      <p class="svc-title">Motion Graphics</p>
+      <p class="svc-desc">Logo animations, lower thirds, kinetic text, and custom title sequences.</p>
+      <p class="svc-price">From ₹3,000 / asset</p>
+    </div>
+    <div class="svc">
+      <div class="svc-num">04</div>
+      <p class="svc-title">Brand & Commercial</p>
+      <p class="svc-desc">High-impact brand videos, ad edits, product showcases — colour graded and export-ready.</p>
+      <p class="svc-price">From ₹8,000 / project</p>
+    </div>
+    <div class="svc" style="border-color:var(--accent);">
+      <div class="svc-num">05</div>
+      <p class="svc-title">Rush Delivery ⚡</p>
+      <p class="svc-desc">Need it yesterday? 24–48 hour turnaround add-on available on all packages.</p>
+      <p class="svc-price">+50% on base price</p>
+    </div>
+    <div class="svc">
+      <div class="svc-num">06</div>
+      <p class="svc-title">Monthly Retainer</p>
+      <p class="svc-desc">Consistent content pipeline? Lock in priority slots and save. Ideal for creators and agencies.</p>
+      <p class="svc-price">From ₹15,000 / month</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-layout">
+    <div class="reveal">
+      <h2 class="contact-h">Let's make<br>something<br><em>great.</em></h2>
+      <p class="contact-sub">Open for freelance projects, retainers, and collaborations. Fast delivery is always on the table.</p>
+      <div class="contact-methods">
+        <a href="mailto:xyz@gmail.com" class="contact-method">
+          <div class="contact-method-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </div>
+          <div class="contact-method-detail">
+            <span class="contact-method-label">Email</span>
+            <span class="contact-method-val">xyz@gmail.com</span>
+          </div>
+        </a>
+      </div>
+      <div class="best-at">
+        <h4>What I'm best at</h4>
+        <ul>
+          <li>Story-driven content & motion graphics</li>
+          <li>Short-form content — Reels, Shorts, TikTok</li>
+          <li>IRL vlogs, cashcow & YouTube edits</li>
+          <li>Brand ads and product showcases</li>
+        </ul>
+      </div>
+    </div>
+    <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+      <div class="field-row">
+        <div class="field">
+          <label>Your name</label>
+          <input type="text" placeholder="e.g. Priya Sharma" required/>
+        </div>
+        <div class="field">
+          <label>Email address</label>
+          <input type="email" placeholder="your@email.com" required/>
+        </div>
+      </div>
+      <div class="field">
+        <label>Project type</label>
+        <select>
+          <option value="">Select a service...</option>
+          <option>Short-form editing</option>
+          <option>Long-form / YouTube</option>
+          <option>Motion graphics</option>
+          <option>Brand / Commercial</option>
+          <option>Rush delivery</option>
+          <option>Monthly retainer</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Deadline</label>
+        <input type="text" placeholder="e.g. within 3 days, end of month..."/>
+      </div>
+      <div class="field">
+        <label>Project details</label>
+        <textarea rows="4" placeholder="Tell me about your channel, style references, and what you need..."></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Send message <span>→</span></button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">SUNIDHI BHARTI</div>
+  <span>Video Editor & Motion Graphics Artist · Pune, India</span>
+  <span>© 2025</span>
+</footer>
+
+<script>
+/* CURSOR */
+var cur=document.getElementById('cursor');
+document.addEventListener('mousemove',function(e){
+  cur.style.left=e.clientX+'px';
+  cur.style.top=e.clientY+'px';
+});
+document.querySelectorAll('a,button,.video-card,.svc').forEach(function(el){
+  el.addEventListener('mouseenter',function(){cur.classList.add('grow');});
+  el.addEventListener('mouseleave',function(){cur.classList.remove('grow');});
+});
+
+/* MARQUEE DATA */
+var creators=[
+  {init:'MM',name:'Mementoe',sub:'3.1M+ · Gaming'},
+  {init:'TR',name:'Tayo Ricci',sub:'3M+ · Shorts'},
+  {init:'VC',name:'ViralClub',sub:'120K+ · Podcast'},
+  {init:'YS',name:'Yash Sharma',sub:'500K+ · Fitness'},
+  {init:'RH',name:'Ryan Haff',sub:'140K+ · Nutrition'},
+  {init:'CM',name:'Curve Media',sub:'Documentary'},
+  {init:'DM',name:'Dude Real Media',sub:'180K+ · Clipping'},
+  {init:'NB',name:'NexusBrands',sub:'Commercial'},
+];
+function buildMarquee(){
+  var track=document.getElementById('marqueeTrack');
+  var doubled=creators.concat(creators);
+  doubled.forEach(function(c){
+    var div=document.createElement('div');
+    div.className='marquee-item';
+    div.innerHTML='<div class="marquee-avatar">'+c.init+'</div><div><div class="marquee-name">'+c.name+'</div><div class="marquee-sub">'+c.sub+'</div></div>';
+    track.appendChild(div);
+  });
+  // add dot separators
+  track.querySelectorAll('.marquee-item').forEach(function(item,i){
+    if(i<track.children.length-1){
+      var dot=document.createElement('div');
+      dot.className='marquee-dot';
+      item.after(dot);
+    }
+  });
+}
+buildMarquee();
+
+/* SCROLL REVEAL */
+var reveals=document.querySelectorAll('.reveal');
+var io=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('visible');}
+  });
+},{threshold:0.12});
+reveals.forEach(function(el){io.observe(el);});
+
+/* VIDEO OVERLAY — click to enable pointer events */
+document.querySelectorAll('.video-card').forEach(function(card){
+  card.addEventListener('click',function(){
+    var overlay=card.querySelector('.video-thumb-overlay');
+    var iframe=card.querySelector('iframe');
+    if(overlay){overlay.style.display='none';}
+    if(iframe){iframe.style.pointerEvents='auto';}
+    var src=iframe.src;
+    if(src.indexOf('autoplay')===-1){
+      iframe.src=src+(src.indexOf('?')>-1?'&':'?')+'autoplay=1';
+    }
+  });
+});
+
+/* SMOOTH NAV */
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var target=document.querySelector(a.getAttribute('href'));
+    if(target){e.preventDefault();target.scrollIntoView({behavior:'smooth'});}
+  });
+});
+
+/* FORM SUBMIT */
+function handleSubmit(e){
+  e.preventDefault();
+  var btn=e.target.querySelector('.submit-btn');
+  btn.textContent='Message sent ✓';
+  btn.style.background='#1a2a08';
+  btn.style.color='var(--accent)';
+  btn.disabled=true;
+}
+</script>
+</body>
+</html>
