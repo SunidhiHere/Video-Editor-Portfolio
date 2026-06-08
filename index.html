@@ -176,6 +176,8 @@ hr.divider {
 }
 .creator-name { font-size: 13px; font-weight: 600; }
 .creator-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.creator-card.linkable { transition: border-color 0.2s, transform 0.2s; }
+.creator-card.linkable:hover { border-color: var(--accent); transform: translateY(-2px); }
 
 /* ── VIDEO GRID ────────────────────────────────── */
 .reels-grid {
@@ -495,26 +497,52 @@ footer {
 
 <script>
 // MARQUEE DATA — replace with your real clients
-var creators = [
-  { init: 'C1', name: 'Client Name 1',   sub: 'Niche · Subscribers' },
-  { init: 'C2', name: 'Client Name 2',   sub: 'Niche · Subscribers' },
-  { init: 'C3', name: 'Client Name 3',   sub: 'Niche · Subscribers' },
-  { init: 'C4', name: 'Client Name 4',   sub: 'Niche · Subscribers' },
-  { init: 'C5', name: 'Client Name 5',   sub: 'Niche · Subscribers' },
-  { init: 'C6', name: 'Client Name 6',   sub: 'Niche · Subscribers' },
-  { init: 'C7', name: 'Client Name 7',   sub: 'Niche · Subscribers' },
-  { init: 'C8', name: 'Client Name 8',   sub: 'Niche · Subscribers' },
+// var creators = [
+  // { init: 'C1', name: 'Client Name 1',   sub: 'Niche · Subscribers' },
+  // { init: 'C2', name: 'Client Name 2',   sub: 'Niche · Subscribers' },
+  // { init: 'C3', name: 'Client Name 3',   sub: 'Niche · Subscribers' },
+  // { init: 'C4', name: 'Client Name 4',   sub: 'Niche · Subscribers' },
+  // { init: 'C5', name: 'Client Name 5',   sub: 'Niche · Subscribers' },
+  // { init: 'C6', name: 'Client Name 6',   sub: 'Niche · Subscribers' },
+  // { init: 'C7', name: 'Client Name 7',   sub: 'Niche · Subscribers' },
+  // { init: 'C8', name: 'Client Name 8',   sub: 'Niche · Subscribers' },
+// ]; (Insert the code)
+  var creators = [
+  { init: 'C1', name: 'Client Name 1', sub: 'Niche · Subscribers', url: 'https://www.youtube.com/@yourclient1' },
+  { init: 'C2', name: 'Client Name 2', sub: 'Niche · Subscribers', url: 'https://www.youtube.com/@yourclient2' },
+  { init: 'C3', name: 'Client Name 3', sub: 'Niche · Subscribers', url: 'https://www.youtube.com/@yourclient3' },
+  { init: 'C4', name: 'Client Name 4', sub: 'Niche · Subscribers', url: '' },
+  { init: 'C5', name: 'Client Name 5', sub: 'Niche · Subscribers', url: '' },
+  { init: 'C6', name: 'Client Name 6', sub: 'Niche · Subscribers', url: '' },
+  { init: 'C7', name: 'Client Name 7', sub: 'Niche · Subscribers', url: '' },
+  { init: 'C8', name: 'Client Name 8', sub: 'Niche · Subscribers', url: '' },
 ];
 
 var track = document.getElementById('marqueeTrack');
 var doubled = creators.concat(creators); // duplicate for seamless loop
+// doubled.forEach(function(c) {
+  // var card = document.createElement('div');
+  // card.className = 'creator-card';
+  // card.innerHTML =
+    // '<div class="creator-avatar">' + c.init + '</div>' +
+    // '<div><div class="creator-name">' + c.name + '</div>' +
+    // '<div class="creator-sub">' + c.sub + '</div></div>';
+  // track.appendChild(card);
+// }); ( Insert code)
 doubled.forEach(function(c) {
   var card = document.createElement('div');
-  card.className = 'creator-card';
+  // card.className = 'creator-card';
+  card.className = 'creator-card' + (c.url ? ' linkable' : '');
   card.innerHTML =
     '<div class="creator-avatar">' + c.init + '</div>' +
     '<div><div class="creator-name">' + c.name + '</div>' +
     '<div class="creator-sub">' + c.sub + '</div></div>';
+  if (c.url) {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', function() {
+      window.open(c.url, '_blank');
+    });
+  }
   track.appendChild(card);
 });
 
