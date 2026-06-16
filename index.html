@@ -496,71 +496,139 @@ footer {
 <footer>© Sunidhi Bharti — Video Editor & Motion Graphics Artist</footer>
 
 <script>
-// MARQUEE DATA — replace with your real clients
-// var creators = [
-  // { init: 'C1', name: 'Client Name 1',   sub: 'Niche · Subscribers' },
-  // { init: 'C2', name: 'Client Name 2',   sub: 'Niche · Subscribers' },
-  // { init: 'C3', name: 'Client Name 3',   sub: 'Niche · Subscribers' },
-  // { init: 'C4', name: 'Client Name 4',   sub: 'Niche · Subscribers' },
-  // { init: 'C5', name: 'Client Name 5',   sub: 'Niche · Subscribers' },
-  // { init: 'C6', name: 'Client Name 6',   sub: 'Niche · Subscribers' },
-  // { init: 'C7', name: 'Client Name 7',   sub: 'Niche · Subscribers' },
-  // { init: 'C8', name: 'Client Name 8',   sub: 'Niche · Subscribers' },
-// ]; (Insert the code)
-  var creators = [
-  { init: 'C1', name: 'Client Name 1', sub: 'Niche · Subscribers', url: 'https://www.youtube.com/@yourclient1' },
-  { init: 'C2', name: 'Client Name 2', sub: 'Niche · Subscribers', url: 'https://www.youtube.com/@yourclient2' },
-  { init: 'C3', name: 'Client Name 3', sub: 'Niche · Subscribers', url: 'https://www.youtube.com/@yourclient3' },
-  { init: 'C4', name: 'Client Name 4', sub: 'Niche · Subscribers', url: '' },
-  { init: 'C5', name: 'Client Name 5', sub: 'Niche · Subscribers', url: '' },
-  { init: 'C6', name: 'Client Name 6', sub: 'Niche · Subscribers', url: '' },
-  { init: 'C7', name: 'Client Name 7', sub: 'Niche · Subscribers', url: '' },
-  { init: 'C8', name: 'Client Name 8', sub: 'Niche · Subscribers', url: '' },
+// ── FEATURED EDITS DATA — replace with your real video details ──
+var featuredEdits = [
+  {
+    embedUrl: 'https://www.youtube.com/embed/YOUR_VIDEO_ID_1',
+    title: 'Featured Edit 1',
+    description: 'Motion Graphics, Animation, and storytelling.',
+    source: 'YouTube'
+  },
+  {
+    embedUrl: 'https://player.vimeo.com/video/YOUR_VIMEO_ID_2?badge=0&autopause=0',
+    title: '10 Second Clip',
+    description: 'Gaming content with fast pacing.',
+    source: 'Vimeo'
+  },
+  {
+    embedUrl: 'https://player.vimeo.com/video/YOUR_VIMEO_ID_3?badge=0&autopause=0',
+    title: 'Marketing Agency AD',
+    description: 'Professional motion graphics and branding.',
+    source: 'Vimeo'
+  },
+  {
+    embedUrl: 'https://www.youtube.com/embed/YOUR_VIDEO_ID_4',
+    title: 'Featured Edit 4',
+    description: 'Short-form content for social media.',
+    source: 'YouTube'
+  }
 ];
 
-var track = document.getElementById('marqueeTrack');
-var doubled = creators.concat(creators); // duplicate for seamless loop
-// doubled.forEach(function(c) {
-  // var card = document.createElement('div');
-  // card.className = 'creator-card';
-  // card.innerHTML =
-    // '<div class="creator-avatar">' + c.init + '</div>' +
-    // '<div><div class="creator-name">' + c.name + '</div>' +
-    // '<div class="creator-sub">' + c.sub + '</div></div>';
-  // track.appendChild(card);
-// }); ( Insert code)
-doubled.forEach(function(c) {
+// Duplicate cards for seamless infinite loop
+var doubledEdits = featuredEdits.concat(featuredEdits);
+var track = document.getElementById('featuredTrack');
+
+doubledEdits.forEach(function(edit) {
   var card = document.createElement('div');
-  // card.className = 'creator-card';
-  card.className = 'creator-card' + (c.url ? ' linkable' : '');
+  card.className = 'featured-edit-card';
   card.innerHTML =
-    '<div class="creator-avatar">' + c.init + '</div>' +
-    '<div><div class="creator-name">' + c.name + '</div>' +
-    '<div class="creator-sub">' + c.sub + '</div></div>';
-  if (c.url) {
-    card.style.cursor = 'pointer';
-    card.addEventListener('click', function() {
-      window.open(c.url, '_blank');
-    });
-  }
+    '<div class="featured-thumb">' +
+      '<iframe src="' + edit.embedUrl + '" allowfullscreen loading="lazy"></iframe>' +
+      '<div class="featured-thumb-overlay">' +
+        '<div class="featured-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="featured-info">' +
+      '<div class="featured-title">' + edit.title + '</div>' +
+      '<div class="featured-meta">' +
+        '<span class="featured-source">' + edit.source + '</span>' +
+        '<span>' + edit.description + '</span>' +
+      '</div>' +
+    '</div>';
+
+  // Click to play
+  card.addEventListener('click', function() {
+    var overlay = card.querySelector('.featured-thumb-overlay');
+    var iframe = card.querySelector('iframe');
+    if (overlay) overlay.style.display = 'none';
+    if (iframe) {
+      iframe.style.pointerEvents = 'auto';
+      var sep = iframe.src.includes('?') ? '&' : '?';
+      if (!iframe.src.includes('autoplay')) {
+        iframe.src += sep + 'autoplay=1';
+      }
+    }
+  });
+
   track.appendChild(card);
 });
+</script>
+<!-- <script> -->
+<!-- // MARQUEE DATA — replace with your real clients -->
+<!-- // var creators = [ -->
+  <!-- // { init: 'C1', name: 'Client Name 1',   sub: 'Niche · Subscribers' }, -->
+  <!-- // { init: 'C2', name: 'Client Name 2',   sub: 'Niche · Subscribers' }, -->
+  <!-- // { init: 'C3', name: 'Client Name 3',   sub: 'Niche · Subscribers' }, -->
+  <!-- // { init: 'C4', name: 'Client Name 4',   sub: 'Niche · Subscribers' }, -->
+  <!-- // { init: 'C5', name: 'Client Name 5',   sub: 'Niche · Subscribers' }, -->
+  <!-- // { init: 'C6', name: 'Client Name 6',   sub: 'Niche · Subscribers' }, -->
+  <!-- // { init: 'C7', name: 'Client Name 7',   sub: 'Niche · Subscribers' }, -->
+  <!-- // { init: 'C8', name: 'Client Name 8',   sub: 'Niche · Subscribers' }, -->
+<!-- // ]; (Insert the code) -->
+  <!-- var creators = [ -->
+  <!-- { init: 'C1', name: 'Client Name 1', sub: 'Niche · Subscribers', url: 'https://www.youtube.com/@yourclient1' }, -->
+  <!-- { init: 'C2', name: 'Client Name 2', sub: 'Niche · Subscribers', url: 'https://www.youtube.com/@yourclient2' }, -->
+  <!-- { init: 'C3', name: 'Client Name 3', sub: 'Niche · Subscribers', url: 'https://www.youtube.com/@yourclient3' }, -->
+  <!-- { init: 'C4', name: 'Client Name 4', sub: 'Niche · Subscribers', url: '' }, -->
+  <!-- { init: 'C5', name: 'Client Name 5', sub: 'Niche · Subscribers', url: '' }, -->
+  <!-- { init: 'C6', name: 'Client Name 6', sub: 'Niche · Subscribers', url: '' }, -->
+  <!-- { init: 'C7', name: 'Client Name 7', sub: 'Niche · Subscribers', url: '' }, -->
+  <!-- { init: 'C8', name: 'Client Name 8', sub: 'Niche · Subscribers', url: '' }, -->
+<!-- ]; -->
 
-// VIDEO — click to activate playback
-// document.querySelectorAll('.reel-card').forEach(function(card) {
-  // card.addEventListener('click', function() {
-    // var overlay = card.querySelector('.reel-thumb-overlay');
-    // var iframe  = card.querySelector('iframe');
-    // if (overlay) overlay.style.display = 'none';
-    // if (iframe) {
-      // iframe.style.pointerEvents = 'auto';
-      // var sep = iframe.src.includes('?') ? '&' : '?';
-      // if (!iframe.src.includes('autoplay')) {
-        // iframe.src += sep + 'autoplay=1';
-      // }
-    // }
-  // });
-// });
+<!-- var track = document.getElementById('marqueeTrack'); -->
+<!-- var doubled = creators.concat(creators); // duplicate for seamless loop -->
+<!-- // doubled.forEach(function(c) { -->
+  <!-- // var card = document.createElement('div'); -->
+  <!-- // card.className = 'creator-card'; -->
+  <!-- // card.innerHTML = -->
+    <!-- // '<div class="creator-avatar">' + c.init + '</div>' + -->
+    <!-- // '<div><div class="creator-name">' + c.name + '</div>' + -->
+    <!-- // '<div class="creator-sub">' + c.sub + '</div></div>'; -->
+  <!-- // track.appendChild(card); -->
+<!-- // }); ( Insert code) -->
+<!-- doubled.forEach(function(c) { -->
+  <!-- var card = document.createElement('div'); -->
+  <!-- // card.className = 'creator-card'; -->
+  <!-- card.className = 'creator-card' + (c.url ? ' linkable' : ''); -->
+  <!-- card.innerHTML = -->
+    <!-- '<div class="creator-avatar">' + c.init + '</div>' + -->
+    <!-- '<div><div class="creator-name">' + c.name + '</div>' + -->
+    <!-- '<div class="creator-sub">' + c.sub + '</div></div>'; -->
+  <!-- if (c.url) { -->
+    <!-- card.style.cursor = 'pointer'; -->
+    <!-- card.addEventListener('click', function() { -->
+      <!-- window.open(c.url, '_blank'); -->
+    <!-- }); -->
+  <!-- } -->
+  <!-- track.appendChild(card); -->
+<!-- }); -->
+
+<!-- // VIDEO — click to activate playback -->
+<!-- // document.querySelectorAll('.reel-card').forEach(function(card) { -->
+  <!-- // card.addEventListener('click', function() { -->
+    <!-- // var overlay = card.querySelector('.reel-thumb-overlay'); -->
+    <!-- // var iframe  = card.querySelector('iframe'); -->
+    <!-- // if (overlay) overlay.style.display = 'none'; -->
+    <!-- // if (iframe) { -->
+      <!-- // iframe.style.pointerEvents = 'auto'; -->
+      <!-- // var sep = iframe.src.includes('?') ? '&' : '?'; -->
+      <!-- // if (!iframe.src.includes('autoplay')) { -->
+        <!-- // iframe.src += sep + 'autoplay=1'; -->
+      <!-- // } -->
+    <!-- // } -->
+  <!-- // }); -->
+<!-- // }); -->
 </script>
 </body>
 </html>
